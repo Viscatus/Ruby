@@ -7,4 +7,3 @@ class Tag
   def== (tag)
   return (tag.str == @str)
 end
-end
