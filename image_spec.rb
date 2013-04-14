@@ -48,20 +48,7 @@ describe Image do
       @image.has_all_tags(@tag_arr).should == true
     end
 
-    it "shouldn't return
-	.0
-
-
-
-
-
-
-
-
-
-
-
-	zero revelance if atleast one tag matches" do
+    it "shouldn't return zero revelance if atleast one tag matches" do
       @tag_arr = [Tag.new("doesnt exist1"), Tag.new("doesnt exist2"), Tag.new("wallpaper")]
       @image.revelance(@tag_arr).should_not == 0;
     end
