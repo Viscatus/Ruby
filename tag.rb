@@ -4,6 +4,7 @@ class Tag
     @str = str
   end
 
-  def== (tag)
-  return (tag.str == @str)
+  def == (tag)
+    return (tag.str == @str)
+  end
 end
