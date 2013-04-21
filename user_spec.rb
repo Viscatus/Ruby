@@ -1,14 +1,27 @@
 require "rspec"
 require_relative "user"
+describe User do
 
-describe "new" do
   before :each do
     @user = User.new "Vardenis", "Pavardenis", "vardpav", "v.p@gmail.com"
   end
 
-  it "should create itself succesfully" do
+  describe "new" do
+    it "should exist" do
+      @user.should_not == nil
+    end
 
-    #To change this template use File | Settings | File Templates.
-    true.should == false
+    it "should have correctly assigned parameters" do
+      @user.name.should == "Vardenis"
+      @user.surname.should == "Pavardenis"
+      @user.nic.should == "vardpav"
+      @user.email.should == "v.p@gmail.com"
+    end
+  end
+
+  describe "user data" do
+    it "should correctly add and get additional data" do
+      @user.add_data {}
+    end
   end
 end
