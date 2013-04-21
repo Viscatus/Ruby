@@ -135,10 +135,21 @@ describe User do
       @user.add_favorite(Author.new('a', 'b', 'c')).should == true
     end
 
+    it 'should not bet able to add same favorites' do
+      a = Author.new('a', 'b', 'c')
+      @user.add_favorite(a)
+      @user.add_favorite(a).should_not == true
+    end
+
     it 'should be able to delete from favorites' do
       a = Image.new('', '', [])
       @user.add_favorite a
       @user.delete_favorite(a).should == true
+    end
+
+    it 'should not be able to delete non-existing favorite' do
+      a = Image.new('', '', [])
+      @user.delete_favorite(a).should_not == true
     end
 
     it 'should be able to delete from favorites by index' do
