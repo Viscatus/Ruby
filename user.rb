@@ -31,7 +31,7 @@ class User
   end
 
   def add_friend user
-    if is_friend user
+    if (user == self) || (is_friend user)
       false
     else
       @friend_list.push user

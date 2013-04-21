@@ -43,6 +43,16 @@ describe User do
       @user.add_friend user2
       @user.is_friend(user2).should == true
     end
+
+    it "should fail to add existing friend" do
+      user2 = User.new "a", "b", "n", "a2@gmail.com"
+      @user.add_friend user2
+      @user.add_friend(user2).should == false
+    end
+
+    it "should fail to add self as a friend" do
+      @user.add_friend(@user).should == false
+    end
   end
 
 end
