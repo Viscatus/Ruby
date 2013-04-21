@@ -1,4 +1,4 @@
-require_relative "comment"
+require_relative "..\\comment"
 
 describe Comment do
 

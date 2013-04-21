@@ -1,5 +1,5 @@
-require_relative "image"
-require_relative "tag"
+require_relative "..\\image"
+require_relative "..\\tag"
 require "simplecov"
 describe Image do
   before :each do

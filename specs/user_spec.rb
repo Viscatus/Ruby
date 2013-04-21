@@ -1,6 +1,6 @@
-require_relative 'user'
-require_relative 'image'
-require_relative 'author'
+require_relative '..\\user'
+require_relative '..\\image'
+require_relative '..\\author'
 describe User do
 
   before :each do
