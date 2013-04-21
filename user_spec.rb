@@ -3,7 +3,7 @@ require_relative "user"
 
 describe "new" do
   before :each do
-    @user = User.new
+    @user = User.new "Vardenis", "Pavardenis", "vardpav", "v.p@gmail.com"
   end
 
   it "should create itself succesfully" do
