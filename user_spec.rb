@@ -37,4 +37,12 @@ describe User do
     end
   end
 
+  describe "user relations" do
+    it "should add friend succesfully" do
+      user2 = User.new "a", "b", "n", "a2@gmail.com"
+      @user.add_friend user2
+      @user.is_friend(user2).should == true
+    end
+  end
+
 end

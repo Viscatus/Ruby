@@ -10,6 +10,7 @@ class User
     @email = email
     @data = {:skype => "", :tel => "", :about => "",
              :ppage => "", :addendum => ""}
+    @friend_list = Array.new
     @@id = @@id + 1
   end
 
@@ -27,5 +28,18 @@ class User
 
   def get_id
     @@id
+  end
+
+  def add_friend user
+    if is_friend user
+      false
+    else
+      @friend_list.push user
+      true
+    end
+  end
+
+  def is_friend user
+    @friend_list.rindex(user) != nil
   end
 end
