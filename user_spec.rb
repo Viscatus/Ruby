@@ -20,8 +20,14 @@ describe User do
   end
 
   describe "user data" do
-    it "should correctly add and get additional data" do
-      @user.add_data {}
+    it "should correctly add additional data" do
+      @user.add_data :skype => "vsvs", :tel => "246 666 44444", :about => "Bio",
+                      :ppage => "google.com", :addendum => "aaaa"
+      @user.get_data(:skype).should == "vsvs"
+      @user.get_data(:tel).should == "246 666 44444"
+      @user.get_data(:about).should == "Bio"
+      @user.get_data(:ppage).should == "google.com"
+      @user.get_data(:addendum).should == "aaaa"
     end
   end
 end
