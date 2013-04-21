@@ -103,6 +103,25 @@ describe User do
     end
   end
 
+  describe 'security' do
+    it 'should set password' do
+      @user.set_password 'abcdefgh'
+      @user.has_password.should == true
+    end
 
+    it 'should pass password' do
+      @user.set_password 'abcdefgh'
+      @user.test_password('abcdefgh').should == true
+    end
+
+    it 'should not pass wrong password' do
+      @user.set_password 'abcdefgh'
+      @user.test_password('aaaaaaa').should_not == true
+    end
+
+    it 'should not pass not set password' do
+      @user.test_password('aaaaaaa').should_not == true
+    end
+  end
 
 end

@@ -1,3 +1,4 @@
+require 'digest/sha2'
 #noinspection RubyClassVariableUsageInspection
 class User
   attr_accessor  :nic, :admin
@@ -11,6 +12,7 @@ class User
              :tel => '', :about => '', :ppage => '', :addendum => ''}
     @privacy = {:name => 0, :surname => 0, :email => 0, :skype => 0,
                  :tel => 0, :about => 0, :ppage => 0, :addendum => 0}
+    @password = nil
     @friend_list = Array.new
     @@id = @@id + 1
     @id = @@id
@@ -68,5 +70,22 @@ class User
         @privacy[key] = data[key]
       end
     end
+  end
+
+  def set_password(pass)
+    @password = Digest::SHA2.new
+    @password << pass
+  end
+
+  def has_password
+    @password.instance_of? Digest::SHA2
+  end
+
+  def test_password(pass)
+    return false if (!has_password)
+    pass2 = Digest::SHA2.new
+    pass2 << pass
+    puts pass2
+    (@password.to_s == pass2.to_s)
   end
 end
