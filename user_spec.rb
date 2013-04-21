@@ -1,4 +1,6 @@
 require_relative 'user'
+require_relative 'image'
+require_relative 'author'
 describe User do
 
   before :each do
@@ -103,7 +105,7 @@ describe User do
     end
   end
 
-  describe 'security' do
+  describe 'password' do
     it 'should set password' do
       @user.set_password 'abcdefgh'
       @user.has_password.should == true
@@ -124,4 +126,46 @@ describe User do
     end
   end
 
+  describe 'favorites' do
+    it 'should add favorite images' do
+      @user.add_favorite(Image.new('', '', [])).should == true
+    end
+
+    it 'should add favorite authors' do
+      @user.add_favorite(Author.new('a', 'b', 'c')).should == true
+    end
+
+    it 'should be able to delete from favorites' do
+      a = Image.new('', '', [])
+      @user.add_favorite a
+      @user.delete_favorite(a).should == true
+    end
+
+    it 'should be able to delete from favorites by index' do
+      a = Image.new('', '', [])
+      @user.add_favorite a
+      @user.delete_favorite_i(0).should == true
+    end
+
+    it 'should detect favorites correctly' do
+      a = Image.new('', '', [])
+      @user.add_favorite a
+      @user.is_favorite(a).should == true
+    end
+
+    it 'should detect favorites by index correctly' do
+      a = Image.new('', '', [])
+      @user.add_favorite a
+      @user.is_favorite(a).should == true
+    end
+
+    it 'should iterate through favorites' do
+      a = Image.new('', '', [])
+      b = Image.new('', '', [])
+      c = Image.new('', '', [])
+      @user.add_favorites a, b, c
+      expect {|fv| @user.each_favorite(&fv) }.to yield_successive_args(a, b, c)
+    end
+
+  end
 end

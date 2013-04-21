@@ -14,6 +14,7 @@ class User
                  :tel => 0, :about => 0, :ppage => 0, :addendum => 0}
     @password = nil
     @friend_list = Array.new
+    @favorites = Array.new
     @@id = @@id + 1
     @id = @@id
   end
@@ -52,7 +53,7 @@ class User
   end
 
   def add_friends (*args)
-    args.each { |i| return false unless add_friend i }
+    args.each { |i| false unless add_friend i }
     true
   end
 
@@ -85,7 +86,42 @@ class User
     return false if (!has_password)
     pass2 = Digest::SHA2.new
     pass2 << pass
-    puts pass2
     (@password.to_s == pass2.to_s)
   end
+
+  def add_favorite(obj)
+    if is_favorite obj
+      false
+    else
+      @favorites.push(obj)
+      true
+    end
+  end
+
+  def add_favorites (*args)
+    args.each { |i| false unless add_favorite i }
+    true
+  end
+
+  def delete_favorite(obj)
+    if is_favorite obj
+      @favorites.delete_at(@favorites.rindex(obj))
+      true
+    else
+      false
+    end
+  end
+
+  def delete_favorite_i(obj)
+    return @favorites.delete_at(obj) != nil
+  end
+
+  def is_favorite(obj)
+    @favorites.rindex(obj) != nil
+  end
+
+  def each_favorite
+    @favorites.each { |i| yield(i)}
+  end
+
 end
