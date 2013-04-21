@@ -17,10 +17,16 @@ describe User do
       @user.nic.should == "vardpav"
       @user.email.should == "v.p@gmail.com"
     end
+
+    it "should generate id correctly" do
+      id = @user.get_id
+      user2 = User.new "a", "b", "n", "a2@gmail.com"
+      user2.get_id.should == id+1
+    end
   end
 
   describe "user data" do
-    it "should correctly add additional data" do
+    it "should correctly add/get additional data" do
       @user.add_data :skype => "vsvs", :tel => "246 666 44444", :about => "Bio",
                       :ppage => "google.com", :addendum => "aaaa"
       @user.get_data(:skype).should == "vsvs"
@@ -30,4 +36,5 @@ describe User do
       @user.get_data(:addendum).should == "aaaa"
     end
   end
+
 end
