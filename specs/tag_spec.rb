@@ -10,6 +10,10 @@ describe Tag do
       @tag.should_not == nil
     end
 
+    it "should have a class of Tag" do
+      @tag.should( be_an_instance_of(Tag) )
+    end
+
     it "should have correctly assigned data" do
       @tag.should == 'zyme'
     end

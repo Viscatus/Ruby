@@ -12,6 +12,10 @@ describe User do
       @user.should_not == nil
     end
 
+    it "should have a class of User" do
+      @user.should( be_an_instance_of(User) )
+    end
+
     it 'should have correctly assigned nic' do
       @user.nic.should == 'vardpav'
     end

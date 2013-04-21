@@ -6,4 +6,6 @@ class ImageBoard
   def load_data
 
   end
+
+  private: load_data
 end
