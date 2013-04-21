@@ -53,6 +53,19 @@ describe User do
     it "should fail to add self as a friend" do
       @user.add_friend(@user).should == false
     end
+
+    it "should iterate through friends without fail" do
+      @user.add_friend User.new("a", "b", "n", "a2@gmail.com")
+      @user.add_friend User.new("a", "b", "n2", "a2@gmail.com")
+      expect{ @user.each_friend {|fr| a = fr.get_id} }.to_not raise_error
+    end
+
+    it "should iterate through friends correctly" do
+      user1 = User.new("a", "b", "n1", "a2@gmail.com")
+      user2 = User.new("a", "b", "n2", "a2@gmail.com")
+      @user.add_friends user1, user2
+      expect {|fr| @user.each_friend(&fr) }.to yield_successive_args(user1, user2)
+    end
   end
 
 end

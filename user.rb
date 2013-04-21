@@ -1,20 +1,22 @@
+#noinspection RubyClassVariableUsageInspection
 class User
   attr_accessor :name, :surname, :nic, :email
 
   @@id = 0
 
-  def initialize name, surname, nic, email
+  def initialize(name, surname, nic, email)
     @name = name
     @surname = surname
     @nic = nic
     @email = email
-    @data = {:skype => "", :tel => "", :about => "",
-             :ppage => "", :addendum => ""}
+    @data = {:skype => '', :tel => '', :about => '',
+             :ppage => '', :addendum => ''}
     @friend_list = Array.new
     @@id = @@id + 1
+    @id = @@id
   end
 
-  def add_data data = {}
+  def add_data(data = {})
     @data.each_key do |key|
       if data.has_key? key
         @data[key] = data[key]
@@ -22,15 +24,15 @@ class User
     end
   end
 
-  def get_data key
+  def get_data(key)
     @data[key]
   end
 
   def get_id
-    @@id
+    @id
   end
 
-  def add_friend user
+  def add_friend(user)
     if (user == self) || (is_friend user)
       false
     else
@@ -39,7 +41,16 @@ class User
     end
   end
 
-  def is_friend user
+  def add_friends (*args)
+    args.each { |i| return false unless add_friend i }
+    true
+  end
+
+  def is_friend(user)
     @friend_list.rindex(user) != nil
+  end
+
+  def each_friend
+    @friend_list.each { |i| yield(i)}
   end
 end
