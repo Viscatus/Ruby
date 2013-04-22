@@ -1,5 +1,6 @@
 require_relative 'ui'
 require_relative 'user'
+require_relative 'image'
 require 'digest/sha2'
 class ImageBoard
   def initialize
@@ -33,6 +34,11 @@ class ImageBoard
     user = User.new name, surname, nic, email, admin_code != nil
     user.set_password pass
     @users.push user
+    return true
+  end
+
+  def upload_image (user, path, tags)
+    img = Image.new
     return true
   end
 

@@ -38,6 +38,8 @@ class UI
           del_friend
         when 'printfriend'
           print_friend
+        when 'upload'
+          upload_image
         when 'login'
           login
         when 'logout'
@@ -212,6 +214,14 @@ class UI
     else
       puts 'Failed to add friend!'
     end
+  end
+
+  def upload_image
+    if (@user == nil)
+      puts 'Can\'t upload images as anonymous'
+      return false
+    end
+    print
   end
 
   def login

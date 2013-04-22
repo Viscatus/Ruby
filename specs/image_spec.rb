@@ -1,9 +1,13 @@
 require_relative "..\\image"
 require_relative "..\\tag"
+require_relative "..\\user"
 require "simplecov"
 describe Image do
   before :each do
-    @image = Image.new "img1.png", "thumb11.png", [Tag.new("transparent"), Tag.new("wallpaper"), Tag.new("moon"), Tag.new("space")]
+    @user = User.new 'a', 'b', 'n', 'a@a.lt'
+    @image = Image.new "img1.png", "thumb11.png",
+                        [Tag.new("transparent"), Tag.new("wallpaper"),
+                         Tag.new("moon"), Tag.new("space")], @user
   end
 
   describe "new" do

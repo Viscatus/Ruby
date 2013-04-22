@@ -3,10 +3,15 @@ class Image
 
   @creation_date
 
-  def initialize img_name, thumb_name, tags
+  def initialize img_name, thumb_name, tags, owner=nil
     @img_name = img_name
     @thumb_name = thumb_name
     @tags = tags
+    @owner = owner
+  end
+
+  def get_owner
+    @owner
   end
 
   def add_tag(tag)
