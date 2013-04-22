@@ -73,6 +73,14 @@ class User
     end
   end
 
+  def get_privacy(key, user=nil)
+    if ((user == nil) ||
+        (user.is_admin))
+      return @privacy[key]
+    end
+    nil
+  end
+
   def set_password(pass)
     @password = Digest::SHA2.new
     @password << pass

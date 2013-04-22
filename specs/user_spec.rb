@@ -107,6 +107,11 @@ describe User do
                         :tel => 0, :about => 0, :ppage => 0, :addendum => 0
       @user.get_data(:name, user1).should == nil
     end
+    it 'should get privacy correctly' do
+      @user.set_privacy :name => 1, :surname => 0, :email => 0, :skype => 0,
+                        :tel => 0, :about => 0, :ppage => 0, :addendum => 0
+      @user.get_privacy(:name).should == 1
+    end
   end
 
   describe 'password' do
