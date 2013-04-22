@@ -2,6 +2,7 @@ require_relative 'ui'
 require_relative 'user'
 require_relative 'image'
 require 'digest/sha2'
+require 'net/http'
 class ImageBoard
   def initialize
     @images = Array.new
@@ -37,14 +38,6 @@ class ImageBoard
     return true
   end
 
-  def upload_full_image_file path
-
-  end
-
-  def create_thumbnail path
-
-  end
-
   def upload_image (user, path, tags)
 
     return true
@@ -76,5 +69,5 @@ class ImageBoard
 
   end
 
-  private :load_data, :save_data, :upload_full_image_file, :create_thumbnail
+  private :load_data, :save_data
 end

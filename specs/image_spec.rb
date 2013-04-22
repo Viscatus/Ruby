@@ -5,7 +5,7 @@ require "simplecov"
 describe Image do
   before :each do
     @user = User.new 'a', 'b', 'n', 'a@a.lt'
-    @image = Image.new "img1.png", "thumb11.png",
+    @image = Image.new ".\\test_data\\1.jpg",
                         [Tag.new("transparent"), Tag.new("wallpaper"),
                          Tag.new("moon"), Tag.new("space")], @user
   end
@@ -20,16 +20,32 @@ describe Image do
     end
 
     it "should have assigned image filepath" do
-      @image.img_name.should == "img1.png"
-    end
-
-    it "should have assigned thumb filepath" do
-      @image.thumb_name.should == "thumb11.png"
+      @image.img_name.should == ".\\test_data\\1.jpg"
     end
 
     it "should have assigned owner" do
       @image.get_owner == @user
     end
+
+    it "should generate id correctly" do
+      image2 =Image.new "test_data\\2.png",
+                        [Tag.new("transparent"), Tag.new("wallpaper"),
+                         Tag.new("moon"), Tag.new("space")], @user
+      image3 =Image.new "test_data\\3.png",
+                        [Tag.new("transparent"), Tag.new("wallpaper"),
+                         Tag.new("moon"), Tag.new("space")], @user
+      image3.get_id.should == image2.get_id + 1
+    end
+
+    it "should initialize image paths correctly" do
+      @image.upload_images
+    end
+
+    it "should initialize www image paths correctly" do
+      @image.img_name = 'http://wiki.mifsa.lt/1.12.0/skins/common/images/mifsa.png'
+      @image.upload_images
+    end
+
   end
   describe "tags" do
     it "should not fail adding a tag" do
