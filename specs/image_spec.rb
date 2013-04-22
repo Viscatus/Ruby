@@ -46,6 +46,11 @@ describe Image do
       @image.upload_images
     end
 
+    it "should initialize www image paths with query correctly" do
+      @image.img_name = 'http://wiki.mifsa.lt/1.12.0/skins/common/images/mifsa.png?a=a'
+      @image.upload_images
+    end
+
   end
   describe "tags" do
     it "should not fail adding a tag" do
