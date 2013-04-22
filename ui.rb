@@ -8,6 +8,9 @@ class UI
       case @input
         when 'register'
           register
+        when 'register_admin'
+          code = gets.chomp
+          register code
         when 'help'
           show_greet
         else
@@ -18,7 +21,7 @@ class UI
 
   end
 
-  def register
+  def register admin_code=nil
     puts 'Input following:'
     print 'Name: '
     name = gets.chomp
@@ -26,8 +29,18 @@ class UI
     surname = gets.chomp
     print 'Nickname: '
     nic = gets.chomp
-
-    image_board.register
+    while @image_board.check_nic_exists nic
+      print 'Nickname is taken! please retry: '
+      nic = gets.chomp
+    end
+    print 'Email: '
+    email = gets.chomp
+    while (@image_board.check_nic_exists nic)||
+           !(email =~ /^[\w\.=-]+@[\w\.-]+\.[\w]{2,3}$/)
+      print 'Email is taken or bad format! please retry: '
+      email = gets.chomp
+    end
+    @image_board.register_user(name, surname, nic, email, admin_code)
   end
 
   def show_greet
