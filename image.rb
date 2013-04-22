@@ -40,9 +40,10 @@
           fl.write(resp.body)
         end
         fl.close
-        return true
+        return "img\\#{@id}.#{path.split('.')[-1]}"
       else
         pn = Pathname.new path
+        puts path
         FileUtils.cp(pn, "img\\#{@id}.#{path.split('.')[-1]}")
         return "img\\#{@id}.#{path.split('.')[-1]}"
       end

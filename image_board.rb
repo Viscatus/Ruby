@@ -1,6 +1,7 @@
 require_relative 'ui'
 require_relative 'user'
 require_relative 'image'
+require_relative 'tag'
 require 'yaml'
 require 'digest/sha2'
 require 'net/http'
@@ -92,7 +93,8 @@ class ImageBoard
    if find_tag str
      return false
    end
-   @tags.push Tag.new(str)
+   a = Tag.new(str)
+   @tags.push a
    true
   end
 

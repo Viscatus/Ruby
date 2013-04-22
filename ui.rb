@@ -1,3 +1,4 @@
+require_relative 'image'
 class UI
 
   def initialize image_board
@@ -46,8 +47,6 @@ class UI
           print_tag
         when 'find'
           find_image
-        when 'open'
-          open_image
         when 'login'
           login
         when 'logout'
@@ -187,20 +186,20 @@ class UI
 
   def find_image
     print 'Input tags, seperated by comma , : '
-    tags = gets.split(',')
-    a = @image_board.find_image tags
-    if a.length == 0
+    tags = gets.chomp.split(',')
+    a = @image_board.find_images tags
+    if (a == nil)||(a.length == 0)
       puts 'Images not found'
     else
       a.each { |i|
-        puts "(r: #{i[0]}, id:#{i[1].get_id}) Image: #{i[1].img_path}"
+        puts "(r: #{i[0]}, id:#{i[1].get_id}) Image: #{i[1].img_name.to_s}"
       }
     end
   end
 
   def open_image
     puts 'Input image id:'
-    id = gets
+    id = gets.chomp
     id = @image_board.find_image id
     if id == nil
       puts 'Image not found!'
@@ -251,7 +250,9 @@ class UI
 
   def print_tag
     print 'Tags: '
-    @image_board.tags.each {|i| print " #{i.str}"}
+    @image_board.tags.each {|i|
+      print " #{i.str}"
+    }
     puts
   end
 
@@ -262,7 +263,7 @@ class UI
     end
     print_tag
     print 'Input tag: '
-    tagname = gets
+    tagname = gets.chomp
     if @image_board.add_tag tagname
        puts 'Tag added!'
     else
@@ -277,19 +278,16 @@ class UI
       return false
     end
     print 'Input image path or URI: '
-    path = gets
+    path = gets.chomp
     print_tag
     print 'Input tags, seperated by comma , : '
-    tags = gets.split(',')
-    begin
+    tags = gets.chomp.split(',')
+
       if @image_board.upload_image @user, path, tags
         puts 'Image added succesfully!'
       else
         puts 'failed to add image'
       end
-    resque Exception
-      puts 'failed to add image'
-    end
 
   end
 
@@ -326,8 +324,7 @@ class UI
     puts 'upload - upload an image'
     puts 'addtag - create tagt'
     puts 'printtag - print all tags'
-    puts 'find - find image by tags'
-    puts 'open - open image by id'
+    puts 'find - find image by tags
   end
 
   def output_username
