@@ -14,5 +14,11 @@ describe ImageBoard do
       @imgboard.should( be_an_instance_of(ImageBoard) )
     end
 
+  describe "data" do
+    it 'should check for nickname existance correctly' do
+      @imgboard.check_nic_exists('zero').should == false
+    end
+  end
+
   end
 end
