@@ -38,7 +38,7 @@ describe ImageBoard do
 
     it 'should register user' do
       @imgboard.register_user 'z', 'e', 'zero', 'aaaa', 'z@gmail.com'
-      @imgboard.instance_eval {@users}[0].nic.should == 'zero'
+      @imgboard.find_user('zero').should_not == nil
     end
 
     it 'should not register user with existing nic/email' do
@@ -71,17 +71,64 @@ describe ImageBoard do
 
     it 'should find user' do
       @imgboard.register_user'z', 'e', 'zero', 'aaaa', 'z@gmail.com'
-
       @imgboard.get_user(@imgboard.instance_eval {@users}[0].get_id).should_not == nil
     end
 
     it 'should find user by nic' do
       @imgboard.register_user'z', 'e', 'zero', 'aaaa', 'z@gmail.com'
-
       @imgboard.find_user('zero').should_not == nil
+    end
+
+    it 'should have such user in database' do
+      @imgboard.register_user'z', 'e', 'zero', 'aaaa', 'z@gmail.com'
+      user = @imgboard.find_user('zero')
+      @imgboard.should have_such_user_id user.get_id
+    end
+
+    it 'should not have a user of higher id than the last one created' do
+      @imgboard.register_user'z', 'e', 'zero2', 'aaaa', 'z@gmail.com'
+      user = @imgboard.find_user('zero2')
+      @imgboard.should_not have_such_user_id user.get_id+1
+    end
+    it 'should close succesfully' do
+      lambda {
+        @imgboard.close
+      }.should_not raise_exception
+    end
+
+    it 'should add tag' do
+      @imgboard.add_tag('test').should == true
+    end
+    it 'should fail to add same tag' do
+      @imgboard.add_tag('test')
+      @imgboard.add_tag('test').should_not == true
+    end
+    it 'should find tag' do
+      @imgboard.add_tag('test')
+      @imgboard.find_tag('test').should_not == nil
     end
   end
     describe 'images' do
+      it 'should find image' do
+        @imgboard.register_user'z', 'e', 'zero', 'aaaa', 'z@gmail.com'
+        user = @imgboard.find_user 'zero'
+        @imgboard.upload_image(user, 'C:\Users\Viscatus\RubymineProjects\Ruby\test_data\2.jpg', [])
+        @imgboard.find_image(@imgboard.instance_eval{@images[-1].get_id}).should_not == nil
+      end
+
+      it 'should find image by tags' do
+        @imgboard.register_user'z', 'e', 'zero', 'aaaa', 'z@gmail.com'
+        user = @imgboard.find_user 'zero'
+        @imgboard.upload_image(user, 'C:\Users\Viscatus\RubymineProjects\Ruby\test_data\2.jpg', ["one", "two"])
+        @imgboard.find_images(["one"]).should_not == []
+      end
+
+      it 'should upload image' do
+        @imgboard.register_user'z', 'e', 'zero', 'aaaa', 'z@gmail.com'
+        user = @imgboard.find_user 'zero'
+        @imgboard.upload_image(user, 'C:\Users\Viscatus\RubymineProjects\Ruby\test_data\2.jpg', []).should == true
+      end
+
       it 'should upload image' do
         @imgboard.register_user'z', 'e', 'zero', 'aaaa', 'z@gmail.com'
         user = @imgboard.find_user 'zero'
@@ -100,5 +147,15 @@ describe ImageBoard do
         }.should raise_exception
       end
     end
+  end
+end
+RSpec::Matchers.define :have_such_user_id do |expected|
+  match do |actual|
+      lambda {
+          actual.instance_eval {@users}.each do |i|
+            return true if i.get_id == expected
+          end
+        return false
+      }.call
   end
 end

@@ -93,17 +93,18 @@ class User
   def set_password(pass)
     @password = Digest::SHA2.new
     @password << pass
+    @password = @password.to_s
   end
 
   def has_password
-    @password.instance_of? Digest::SHA2
+    @password != nil
   end
 
   def test_password(pass)
     return false if (!has_password)
     pass2 = Digest::SHA2.new
     pass2 << pass
-    (@password.to_s == pass2.to_s)
+    (@password == pass2.to_s)
   end
 
   def add_favorite(obj)

@@ -1,9 +1,12 @@
 require_relative 'ui'
 require_relative 'user'
 require_relative 'image'
+require 'yaml'
 require 'digest/sha2'
 require 'net/http'
 class ImageBoard
+  attr_accessor :images, :tags, :users
+
   def initialize
     @images = Array.new
     @tags = Array.new
@@ -36,6 +39,17 @@ class ImageBoard
     user.set_password pass
     @users.push user
     return true
+  end
+
+  def find_image id
+    @images.each {|i| return i if i.get_id == id}
+    nil
+  end
+
+  def find_images tags
+    rez = Array.new
+    @images.each {|i| rez.push [i.revelance(tags), i] if i.revelance(tags) != 0}
+    return rez.sort{ |x, y| x[0] <=> y[0] }
   end
 
   def upload_image (user, path, tags)
@@ -74,13 +88,50 @@ class ImageBoard
     }
     nil
   end
+  def add_tag (str)
+   if find_tag str
+     return false
+   end
+   @tags.push Tag.new(str)
+   true
+  end
+
+  def find_tag (tag)
+    @tags.each {|i|
+      if i == tag
+        return i
+      end
+    }
+    nil
+  end
+
+  def close
+    save_data
+  end
 
   def load_data
     @admin_code = (Digest::SHA2.new << 'abcd').to_s
+    parsed = begin
+      @images = YAML.load File.open("data\\images.yaml")
+      @tags = YAML.load File.open("data\\tags.yaml")
+      @users = YAML.load File.open("data\\users.yaml")
+    rescue Exception => e
+    end
   end
 
   def save_data
-
+    File.open("data\\images.yaml", "w") {
+        |f| f.write (@images.to_yaml)
+      f.close
+    }
+    File.open("data\\tags.yaml", "w") {
+        |f| f.write (@tags.to_yaml)
+      f.close
+    }
+    File.open("data\\users.yaml", "w") {
+        |f| f.write (@users.to_yaml)
+      f.close
+    }
   end
 
   private :load_data, :save_data

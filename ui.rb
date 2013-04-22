@@ -40,6 +40,14 @@ class UI
           print_friend
         when 'upload'
           upload_image
+        when 'addtag'
+          add_tag
+        when 'printtag'
+          print_tag
+        when 'find'
+          find_image
+        when 'open'
+          open_image
         when 'login'
           login
         when 'logout'
@@ -53,7 +61,7 @@ class UI
       end
       @input = get_input_line.chomp
     end
-
+    @image_board.close
   end
 
   def register admin_code=nil
@@ -177,6 +185,31 @@ class UI
     puts "======================================"
   end
 
+  def find_image
+    print 'Input tags, seperated by comma , : '
+    tags = gets.split(',')
+    a = @image_board.find_image tags
+    if a.length == 0
+      puts 'Images not found'
+    else
+      a.each { |i|
+        puts "(r: #{i[0]}, id:#{i[1].get_id}) Image: #{i[1].img_path}"
+      }
+    end
+  end
+
+  def open_image
+    puts 'Input image id:'
+    id = gets
+    id = @image_board.find_image id
+    if id == nil
+      puts 'Image not found!'
+    else
+      system("explorer.exe #{id.img_path}")
+    end
+
+  end
+
   def print_friend
     if (@user == nil)
       puts 'Can\'t print friends as anonymous'
@@ -216,6 +249,28 @@ class UI
     end
   end
 
+  def print_tag
+    print 'Tags: '
+    @image_board.tags.each {|i| print " #{i.str}"}
+    puts
+  end
+
+  def add_tag
+    if (@user == nil)
+      puts 'Can\'t make tags as anonymous'
+      return false
+    end
+    print_tag
+    print 'Input tag: '
+    tagname = gets
+    if @image_board.add_tag tagname
+       puts 'Tag added!'
+    else
+      puts 'Failed to add tag'
+    end
+  end
+
+
   def upload_image
     if (@user == nil)
       puts 'Can\'t upload images as anonymous'
@@ -223,6 +278,18 @@ class UI
     end
     print 'Input image path or URI: '
     path = gets
+    print_tag
+    print 'Input tags, seperated by comma , : '
+    tags = gets.split(',')
+    begin
+      if @image_board.upload_image @user, path, tags
+        puts 'Image added succesfully!'
+      else
+        puts 'failed to add image'
+      end
+    resque Exception
+      puts 'failed to add image'
+    end
 
   end
 
@@ -256,6 +323,11 @@ class UI
     puts 'printfriend - print all friends'
     puts 'delfriend - delete a friend'
     puts 'login - login to account'
+    puts 'upload - upload an image'
+    puts 'addtag - create tagt'
+    puts 'printtag - print all tags'
+    puts 'find - find image by tags'
+    puts 'open - open image by id'
   end
 
   def output_username
