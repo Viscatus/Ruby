@@ -28,10 +28,10 @@ class User
     @nic = data[:nic] if data[:nic] != nil
   end
 
-  def get_data(key, user=nil)
+  def get_data(key, user=nil, anon = false)
     return @nic if key == :nic
-    if (user == nil) ||
-        (user.is_admin) ||
+    if ((user == nil)&&(!anon)) ||
+        ((user != nil)&&(user.is_admin)) ||
         (@privacy[key] == 2) ||
        ((@privacy[key] == 1)&&is_friend(user))
       return @data[key]
@@ -55,6 +55,15 @@ class User
   def add_friends (*args)
     args.each { |i| false unless add_friend i }
     true
+  end
+
+  def remove_friend (user)
+    if (!is_friend user)
+      false
+    else
+      @friend_list.delete_at(@friend_list.rindex(user))
+      true
+    end
   end
 
   def is_friend(user)

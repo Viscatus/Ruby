@@ -68,6 +68,12 @@ describe ImageBoard do
     it 'should fail to login user correctly' do
       @imgboard.try_login('zero', 'aaaa').should == nil
     end
+
+    it 'should find user' do
+      @imgboard.register_user'z', 'e', 'zero', 'aaaa', 'z@gmail.com'
+
+      @imgboard.get_user(@imgboard.instance_eval {@users}[0].get_id).should_not == nil
+    end
   end
 
   end

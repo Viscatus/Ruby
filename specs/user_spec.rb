@@ -46,6 +46,17 @@ describe User do
       @user.is_friend(user2).should == true
     end
 
+    it 'should remove friend succesfully' do
+      user2 = User.new 'a', 'b', 'n', 'a2@gmail.com'
+      @user.add_friend user2
+      @user.remove_friend(user2).should == true
+    end
+
+    it 'should not remove non-existing friend succesfully' do
+      user2 = User.new 'a', 'b', 'n', 'a2@gmail.com'
+      @user.remove_friend(user2).should == false
+    end
+
     it 'should fail to add existing friend' do
       user2 = User.new 'a', 'b', 'n', 'a2@gmail.com'
       @user.add_friend user2

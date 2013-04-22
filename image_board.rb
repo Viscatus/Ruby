@@ -45,6 +45,15 @@ class ImageBoard
     nil
   end
 
+  def get_user (id)
+    @users.each {|i|
+      if i.get_id == id
+        return i
+      end
+    }
+    nil
+  end
+
   def load_data
     @admin_code = (Digest::SHA2.new << 'abcd').to_s
   end

@@ -18,6 +18,8 @@ class UI
           else
             print_user_info
           end
+        when 'getinfo'
+          print_other_user_info
         when 'setinfo'
           if @user == nil
             puts 'Nothing to set!'
@@ -30,6 +32,12 @@ class UI
           else
             set_user_priv
           end
+        when 'addfriend'
+          add_friend
+        when 'delfriend'
+          del_friend
+        when 'printfriend'
+          print_friend
         when 'login'
           login
         when 'logout'
@@ -75,21 +83,72 @@ class UI
   end
 
   def set_user_info
-
+    print 'Input key: '
+    key = gets.chomp.to_sym
+    if @user.get_data(key) == nil
+      puts 'Bad key!'
+      return false
+    end
+    puts "Current value #{@user.get_data(key)}"
+    print "Input new: "
+    val = gets.chomp
+    @user.add_data(key => val)
   end
 
   def set_user_priv
-
+    print 'Input key: '
+    key = gets.chomp.to_sym
+    if @user.get_data(key) == nil
+      puts 'Bad key!'
+      return false
+    end
+    puts "Current value #{print_single_privacy @user.get_privacy(key)}"
+    print "Input new (0 - private, 1 - friends, 2 - public): "
+    val = gets.chomp
+    @user.set_privacy({key => (val % 3).to_i})
   end
 
   def print_single_privacy priv
     if priv == 0
-      print 'private'
+      return 'private'
     elsif priv == 1
-      print 'friends-only'
+      return 'friends-only'
     elsif priv == 2
-      print 'public'
+      return  'public'
+    else
+      return 'undefined'
     end
+  end
+
+  def print_single_data data
+    if data == nil
+      return '<forbidden>'
+    elsif data == ''
+      return '<empty>'
+    else
+      return data
+    end
+  end
+
+  def print_other_user_info
+    print 'Input user id: '
+    uid = gets.chomp
+    user = @image_board.get_user uid.to_i
+    if user == nil
+      puts 'Such user does not exit!'
+      return false
+    end
+    puts "======================================"
+    puts "User info for #{user.nic}: "
+    puts "email: #{print_single_data(user.get_data :email, user, @user==nil)}"
+    puts "Name: #{print_single_data(user.get_data :name, user, @user==nil)}"
+    puts "Surname: #{print_single_data(user.get_data :surname, user, @user==nil)}"
+    puts "Skype: #{print_single_data(user.get_data :skype, user, @user==nil)}"
+    puts "Telephone: #{print_single_data(user.get_data :tel, user, @user==nil)}"
+    puts "About: #{print_single_data(user.get_data :about, user, @user==nil)}"
+    puts "Home page: #{print_single_data(user.get_data :ppage, user, @user==nil)}"
+    puts "Additional information: #{print_single_data(user.get_data :addendum, user, @user==nil)}"
+    puts "======================================"
   end
 
   def print_user_info
@@ -116,6 +175,45 @@ class UI
     puts "======================================"
   end
 
+  def print_friend
+    if (@user == nil)
+      puts 'Can\'t print friends as anonymous'
+      return false
+    end
+    print "Friends:"
+    @user.each_friend {|i| print " #{i}"}
+  end
+
+  def del_friend
+    if (@user == nil)
+      puts 'Can\'t delete friends as anonymous'
+      return false
+    end
+    print 'Input friends nic: '
+    fnic = gets
+    user = @image_board.get_user uid.to_i
+    if (@user.remove_friend user)
+      puts 'Removed!'
+    else
+      puts 'Failed to remove friend!'
+    end
+  end
+
+  def add_friend
+    if (@user == nil)
+      puts 'Can\'t add friends as anonymous'
+      return false
+    end
+    print 'Input friends nic: '
+    fnic = gets
+    user = @image_board.get_user uid.to_i
+    if (@user.add_friend user)
+      puts 'Added!'
+    else
+      puts 'Failed to add friend!'
+    end
+  end
+
   def login
     print 'Nickname: '
     nic = gets.chomp
@@ -139,6 +237,12 @@ class UI
     puts 'help - show this'
     puts 'exit - exits program'
     puts 'register - registers new user'
+    puts 'info - print user data'
+    puts 'setinfo - edit user data'
+    puts 'setpriv - edit user privacy settings'
+    puts 'addfriend - add user to friends'
+    puts 'printfriend - print all friends'
+    puts 'delfriend - delete a friend'
     puts 'login - login to account'
   end
 
