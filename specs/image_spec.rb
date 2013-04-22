@@ -23,10 +23,6 @@ describe Image do
       @image.img_name.should == ".\\test_data\\1.jpg"
     end
 
-    it "should have assigned owner" do
-      @image.get_owner == @user
-    end
-
     it "should generate id correctly" do
       image2 =Image.new "test_data\\2.png",
                         [Tag.new("transparent"), Tag.new("wallpaper"),
@@ -41,14 +37,22 @@ describe Image do
       @image.upload_images
     end
 
+    it "should change image path after uploading" do
+      @image.img_name = 'test_data\\2.jpg'
+      lambda {
+        @image.upload_images
+      }.should change(@image, :img_name)
+
+    end
+
     it "should initialize www image paths correctly" do
       @image.img_name = 'http://wiki.mifsa.lt/1.12.0/skins/common/images/mifsa.png'
-      @image.upload_images
+      @image.upload_images.should == true
     end
 
     it "should initialize www image paths with query correctly" do
       @image.img_name = 'http://wiki.mifsa.lt/1.12.0/skins/common/images/mifsa.png?a=a'
-      @image.upload_images
+      @image.upload_images.should == true
     end
 
   end
@@ -65,6 +69,16 @@ describe Image do
     it "shouldn't be possible to add existing tag" do
       @image.add_tag(Tag.new "test_tag3")
       @image.add_tag(Tag.new "test_tag3").should == false
+    end
+
+    it "shouldn't have all added tags" do
+      t1 = Tag.new "test_tag1"
+      t2 = Tag.new "test_tag2"
+      t3 = Tag.new "test_tag3"
+      @image.add_tag(t1)
+      @image.add_tag(t2)
+      @image.add_tag(t3)
+      @image.tags.should include(t1,t2,t3)
     end
 
     it "should not have all tags if they don't match" do
@@ -98,4 +112,36 @@ describe Image do
     end
   end
 
+  describe "owner" do
+    it 'should have the same owner' do
+      image1 = Image.new ".\\test_data\\1.jpg",
+                         [Tag.new("transparent")], @user
+      image2 = Image.new ".\\test_data\\1.jpg",
+                         [Tag.new("transparent")], @user
+      image1.should have_same_owner image2
+    end
+
+    it 'should not have the same owner' do
+      user2 = User.new 'a', 'b', 'n2', 'a@a.lt'
+      image1 = Image.new ".\\test_data\\1.jpg",
+                         [Tag.new("transparent")], user2
+      image2 = Image.new ".\\test_data\\1.jpg",
+                         [Tag.new("transparent")], @user
+      image1.should_not have_same_owner image2
+    end
+
+    it "should have assigned owner" do
+      @image.should have_same_owner @user
+    end
+  end
+end
+
+RSpec::Matchers.define :have_same_owner do |expected|
+  match do |actual|
+    if (expected.instance_of?(Image))
+      actual.get_owner == expected.get_owner
+    else
+      actual.get_owner == expected
+    end
+  end
 end

@@ -23,11 +23,11 @@
       return false if new_path == nil
       @img_name = new_path
       @inited = true
-      true
+      return true
     end
 
     def upload_full_image_file path, id
-      if (path =~ URI::regexp)
+      if (path =~ /(^$)|(^(http|https):\/\/[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(([0-9]{1,5})?\/.*)?$)/ix)
         uri = URI(path)
         if uri.query != nil
           req_path = "#{uri.path}?#{uri.query}"
@@ -40,6 +40,7 @@
           fl.write(resp.body)
         end
         fl.close
+        return true
       else
         pn = Pathname.new path
         FileUtils.cp(pn, "img\\#{@id}.#{path.split('.')[-1]}")

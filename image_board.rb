@@ -39,7 +39,12 @@ class ImageBoard
   end
 
   def upload_image (user, path, tags)
-
+    if (@users.rindex(user) == nil)
+      return false
+    end
+    img = Image.new path, tags, user
+    img.upload_images
+    @images.push img
     return true
   end
 
@@ -55,6 +60,15 @@ class ImageBoard
   def get_user (id)
     @users.each {|i|
       if i.get_id == id
+        return i
+      end
+    }
+    nil
+  end
+
+  def find_user (nic)
+    @users.each {|i|
+      if i.nic == nic
         return i
       end
     }

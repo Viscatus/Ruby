@@ -221,7 +221,9 @@ class UI
       puts 'Can\'t upload images as anonymous'
       return false
     end
-    print
+    print 'Input image path or URI: '
+    path = gets
+
   end
 
   def login

@@ -74,13 +74,31 @@ describe ImageBoard do
 
       @imgboard.get_user(@imgboard.instance_eval {@users}[0].get_id).should_not == nil
     end
-    describe 'images' do
-      it 'should upload image' do
-        user = User.new 'z', 'e', 'zero','z@gmail.com'
-        @imgboard.upload_image user, 'C:\\a.jpg', []
-      end
+
+    it 'should find user by nic' do
+      @imgboard.register_user'z', 'e', 'zero', 'aaaa', 'z@gmail.com'
+
+      @imgboard.find_user('zero').should_not == nil
     end
   end
+    describe 'images' do
+      it 'should upload image' do
+        @imgboard.register_user'z', 'e', 'zero', 'aaaa', 'z@gmail.com'
+        user = @imgboard.find_user 'zero'
+        @imgboard.upload_image(user, 'C:\Users\Viscatus\RubymineProjects\Ruby\test_data\2.jpg', []).should == true
+      end
 
+      it 'should not upload image if user is nonexistatnt' do
+        @imgboard.upload_image(User.new('a', 'a', 'a', 'a'), 'C:\Users\Viscatus\RubymineProjects\Ruby\test_data\2.jpg', []).should == false
+      end
+
+      it 'should raise exception if file doesn\'t exist' do
+        @imgboard.register_user'z', 'e', 'zero', 'aaaa', 'z@gmail.com'
+        user = @imgboard.find_user 'zero'
+        lambda {
+        @imgboard.upload_image(user, 'C:\Users\Viscatus\RubymineProjects\Ruby\test_data', [])
+        }.should raise_exception
+      end
+    end
   end
 end
