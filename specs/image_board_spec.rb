@@ -74,6 +74,12 @@ describe ImageBoard do
 
       @imgboard.get_user(@imgboard.instance_eval {@users}[0].get_id).should_not == nil
     end
+    describe 'images' do
+      it 'should upload image' do
+        user = User.new 'z', 'e', 'zero','z@gmail.com'
+        @imgboard.upload_image user, 'C:\\a.jpg', []
+      end
+    end
   end
 
   end

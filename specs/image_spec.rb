@@ -26,6 +26,10 @@ describe Image do
     it "should have assigned thumb filepath" do
       @image.thumb_name.should == "thumb11.png"
     end
+
+    it "should have assigned owner" do
+      @image.get_owner == @user
+    end
   end
   describe "tags" do
     it "should not fail adding a tag" do

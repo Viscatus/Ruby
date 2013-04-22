@@ -37,8 +37,16 @@ class ImageBoard
     return true
   end
 
+  def upload_full_image_file path
+
+  end
+
+  def create_thumbnail path
+
+  end
+
   def upload_image (user, path, tags)
-    img = Image.new
+
     return true
   end
 
@@ -68,5 +76,5 @@ class ImageBoard
 
   end
 
-  private :load_data, :save_data
+  private :load_data, :save_data, :upload_full_image_file, :create_thumbnail
 end
