@@ -1,7 +1,7 @@
 require 'digest/sha2'
 #noinspection RubyClassVariableUsageInspection
 class User
-  attr_accessor  :nic, :admin
+  attr_accessor  :nic
 
   @@id = 0
 
@@ -31,7 +31,7 @@ class User
   def get_data(key, user=nil)
     return @nic if key == :nic
     if (user == nil) ||
-        (user.admin) ||
+        (user.is_admin) ||
         (@privacy[key] == 2) ||
        ((@privacy[key] == 1)&&is_friend(user))
       return @data[key]
@@ -124,4 +124,8 @@ class User
     @favorites.each { |i| yield(i)}
   end
 
+
+  def is_admin
+    @admin
+  end
 end

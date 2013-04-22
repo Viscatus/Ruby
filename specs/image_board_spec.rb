@@ -37,27 +37,36 @@ describe ImageBoard do
     end
 
     it 'should register user' do
-      @imgboard.register_user 'z', 'e', 'zero', 'z@gmail.com'
+      @imgboard.register_user 'z', 'e', 'zero', 'aaaa', 'z@gmail.com'
       @imgboard.instance_eval {@users}[0].nic.should == 'zero'
     end
 
     it 'should not register user with existing nic/email' do
-      @imgboard.register_user('z', 'e', 'zero', 'z@gmail.com')
-      @imgboard.register_user('z', 'e', 'zero', 'z@gmail.com').should == false
+      @imgboard.register_user('z', 'e', 'zero', 'aaaa', 'z@gmail.com')
+      @imgboard.register_user('z', 'e', 'zero', 'aaaa', 'z@gmail.com').should == false
     end
 
     it 'should not register user with badly formated email' do
-      @imgboard.register_user('z', 'e', 'zero', 'z@gmail.').should == false
+      @imgboard.register_user('z', 'e', 'zero', 'aaaa', 'z@gmail.').should == false
     end
 
     it 'should not register user with bad admin code' do
       @imgboard.instance_eval {@admin_code = (Digest::SHA2.new << 'test').to_s}
-      @imgboard.register_user('z', 'e', 'zero', 'z@gmail.com', 'uno').should == false
+      @imgboard.register_user('z', 'e', 'zero', 'aaaa', 'z@gmail.com', 'uno').should == false
     end
 
     it 'should register user with good admin code' do
-      puts @imgboard.instance_eval {@admin_code = (Digest::SHA2.new << 'test').to_s}
-      @imgboard.register_user('z', 'e', 'zero', 'z@gmail.com', 'test').should == true
+      @imgboard.instance_eval {@admin_code = (Digest::SHA2.new << 'test').to_s}
+      @imgboard.register_user('z', 'e', 'zero', 'aaaa', 'z@gmail.com', 'test').should == true
+    end
+
+    it 'should login user correctly' do
+      @imgboard.register_user'z', 'e', 'zero', 'aaaa', 'z@gmail.com'
+      @imgboard.try_login('zero', 'aaaa').should( be_an_instance_of(User) )
+    end
+
+    it 'should fail to login user correctly' do
+      @imgboard.try_login('zero', 'aaaa').should == nil
     end
   end
 

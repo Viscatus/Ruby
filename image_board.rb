@@ -21,7 +21,7 @@ class ImageBoard
     false
   end
 
-  def register_user (name, surname, nic, email, admin_code=nil)
+  def register_user (name, surname, nic, pass, email, admin_code=nil)
     if (check_nic_exists nic) || (check_email_exists email) ||
         !(email =~ /^[\w\.=-]+@[\w\.-]+\.[\w]{2,3}$/)
       return false
@@ -31,10 +31,19 @@ class ImageBoard
     end
 
     user = User.new name, surname, nic, email, admin_code != nil
+    user.set_password pass
     @users.push user
     return true
   end
 
+  def try_login (nic, pass)
+    @users.each {|i|
+      if i.nic == nic
+        return i if i.test_password pass
+      end
+    }
+    nil
+  end
 
   def load_data
     @admin_code = (Digest::SHA2.new << 'abcd').to_s
