@@ -324,7 +324,7 @@ class UI
     puts 'upload - upload an image'
     puts 'addtag - create tagt'
     puts 'printtag - print all tags'
-    puts 'find - find image by tags
+    puts 'find - find image by tags'
   end
 
   def output_username

@@ -1,5 +1,6 @@
   require 'pathname'
   require 'uri'
+  require 'fileutils'
 
   class Image
     attr_accessor :img_name, :tags
@@ -43,7 +44,6 @@
         return "img\\#{@id}.#{path.split('.')[-1]}"
       else
         pn = Pathname.new path
-        puts path
         FileUtils.cp(pn, "img\\#{@id}.#{path.split('.')[-1]}")
         return "img\\#{@id}.#{path.split('.')[-1]}"
       end
