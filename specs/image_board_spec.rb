@@ -97,11 +97,11 @@ describe ImageBoard do
     end
 
     it 'should add tag' do
-      @imgboard.add_tag('test').should == true
+      @imgboard.add_tag('t').should == true
     end
     it 'should fail to add same tag' do
-      @imgboard.add_tag('test')
-      @imgboard.add_tag('test').should_not == true
+      @imgboard.add_tag('t')
+      @imgboard.add_tag('t').should_not == true
     end
     it 'should find tag' do
       @imgboard.add_tag('test')
@@ -146,6 +146,21 @@ describe ImageBoard do
         @imgboard.upload_image(user, 'C:\Users\Viscatus\RubymineProjects\Ruby\test_data', [])
         }.should raise_exception
       end
+    end
+  end
+  describe 'file data' do
+    it 'should handle yaml reading/writing correctly' do
+      @imgboard.images.push(Image.new('a.jpg', [Tag.new('test1')]))
+      @imgboard.tags.push Tag.new 'test1'
+      @imgboard.users.push User.new 's','p','sp','s@ss.lt'
+      lambda {@imgboard.save_data}.should_not raise_exception
+      @imgboard.images = Array.new
+      @imgboard.tags = Array.new
+      @imgboard.users = Array.new
+      lambda {@imgboard.load_data}.should_not raise_exception
+      @imgboard.images[0].should_not == nil
+      @imgboard.tags.rindex('test1').should_not == -1
+      @imgboard.users.rindex('sp').should_not == -1
     end
   end
 end

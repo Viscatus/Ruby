@@ -135,6 +135,4 @@ class ImageBoard
       f.close
     }
   end
-
-  private :load_data, :save_data
 end
